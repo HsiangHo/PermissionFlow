@@ -2,7 +2,7 @@
 import EventKit
 import Foundation
 
-@available(macOS 13.0, *)
+@available(macOS 11.0, *)
 public struct CalendarPermissionStatusProvider: PermissionStatusProviding {
     public var capability: PermissionStatusCapability { .preflightSupported }
 
@@ -93,7 +93,7 @@ public struct CalendarPermissionStatusProvider: PermissionStatusProviding {
 
 /// Holds a long-lived `EKEventStore` so permission requests are not cancelled
 /// when a temporary store is deallocated (Apple recommends reusing one store).
-@available(macOS 13.0, *)
+@available(macOS 11.0, *)
 private final class CalendarEventStoreBox: @unchecked Sendable {
     static let shared = CalendarEventStoreBox()
 

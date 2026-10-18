@@ -1,19 +1,28 @@
 #if os(macOS)
 import AppKit
 
-@available(macOS 13.0, *)
+@available(macOS 11.0, *)
 @MainActor
 final class SettingsNavigator {
     private let bundleIdentifier = "com.apple.systempreferences"
-    private let applicationURL = URL(fileURLWithPath: "/System/Applications/System Settings.app")
 
     /// Opens System Settings with a generic deeplink URL.
     @discardableResult
     func openSettings(at url: URL) -> Bool {
-        NSWorkspace.shared.openApplication(
-            at: applicationURL,
-            configuration: NSWorkspace.OpenConfiguration()
-        ) { @Sendable _, _ in }  // Called off the main thread: not main-actor.
+        // Opening the URL itself selects System Settings on macOS 13+ and
+        // System Preferences on macOS 11–12. The explicit launch is only a
+        // best-effort enhancement because the app path changed between them.
+        if #available(macOS 13.0, *) {
+            NSWorkspace.shared.openApplication(
+                at: URL(fileURLWithPath: "/System/Applications/System Settings.app"),
+                configuration: NSWorkspace.OpenConfiguration()
+            ) { @Sendable _, _ in }
+        } else {
+            NSWorkspace.shared.openApplication(
+                at: URL(fileURLWithPath: "/System/Library/CoreServices/System Preferences.app"),
+                configuration: NSWorkspace.OpenConfiguration()
+            ) { @Sendable _, _ in }
+        }
 
         let didOpen = NSWorkspace.shared.open(url)
         activateSettings()

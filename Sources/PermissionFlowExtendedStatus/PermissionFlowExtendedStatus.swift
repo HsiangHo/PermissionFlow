@@ -6,7 +6,7 @@ import PermissionFlowInputMonitoringStatus
 import PermissionFlowMediaStatus
 import PermissionFlowScreenRecordingStatus
 
-@available(macOS 13.0, *)
+@available(macOS 11.0, *)
 public enum PermissionFlowExtendedStatus {
     @MainActor
     public static func register() {

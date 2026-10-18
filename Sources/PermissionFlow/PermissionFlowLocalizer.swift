@@ -1,7 +1,7 @@
 #if os(macOS)
 import Foundation
 
-@available(macOS 13.0, *)
+@available(macOS 11.0, *)
 enum PermissionFlowLocalizer {
     /// Resolves a localized string from the best matching `.lproj` bundle for
     /// the injected locale. Never touches `Bundle.module`; uses the resilient

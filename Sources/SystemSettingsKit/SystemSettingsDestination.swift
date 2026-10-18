@@ -6,7 +6,7 @@ import UIKit
 #if os(macOS)
 /// Anchor points for navigating to specific sections within the Displays settings pane.
 /// These anchors allow direct navigation to subsections of the macOS System Settings Displays panel.
-@available(macOS 13.0, *)
+@available(macOS 11.0, *)
 public enum DisplaySettingsAnchor: String, CaseIterable, Sendable {
     /// Opens the Advanced section in Displays settings.
     case advancedSection
@@ -32,14 +32,14 @@ public enum DisplaySettingsAnchor: String, CaseIterable, Sendable {
 
 /// Anchor points for navigating to specific sections within the Login Items settings pane.
 /// These anchors allow direct navigation to login items and extension items.
-@available(macOS 13.0, *)
+@available(macOS 11.0, *)
 public enum LoginItemsSettingsAnchor: String, CaseIterable, Sendable {
     /// Opens the extension items section.
     case extensionItems = "ExtensionItems"
 }
 
 /// Extension point identifiers that System Settings can open inside Login Items & Extensions.
-@available(macOS 13.0, *)
+@available(macOS 11.0, *)
 public enum LoginItemsExtensionPointIdentifier: String, CaseIterable, Sendable {
     /// Opens the Share Menu extension settings.
     case shareServices = "com.apple.share-services"
@@ -65,7 +65,7 @@ public enum LoginItemsExtensionPointIdentifier: String, CaseIterable, Sendable {
 
 /// Anchor points for navigating to specific sections within the Wi-Fi settings pane.
 /// These anchors allow direct navigation to Wi-Fi overview, join, details, and advanced sections.
-@available(macOS 13.0, *)
+@available(macOS 11.0, *)
 public enum WiFiSettingsAnchor: String, CaseIterable, Sendable {
     /// Opens advanced Wi-Fi settings.
     case advanced = "Advanced"
@@ -79,7 +79,7 @@ public enum WiFiSettingsAnchor: String, CaseIterable, Sendable {
 
 /// Anchor points for navigating to specific sections within the VPN settings pane.
 /// These anchors allow direct navigation to VPN and VPN on Demand settings.
-@available(macOS 13.0, *)
+@available(macOS 11.0, *)
 public enum VPNSettingsAnchor: String, CaseIterable, Sendable {
     /// Opens VPN settings.
     case vpn = "VPN"
@@ -89,7 +89,7 @@ public enum VPNSettingsAnchor: String, CaseIterable, Sendable {
 
 /// Common anchor points for navigating to major sections within the Accessibility settings pane.
 /// Use `SystemSettingsDestination.accessibility(anchor: String)` for less common control-level anchors.
-@available(macOS 13.0, *)
+@available(macOS 11.0, *)
 public enum AccessibilitySettingsAnchor: String, CaseIterable, Sendable {
     /// Opens the Display accessibility section.
     case display = "display"
@@ -153,7 +153,7 @@ public enum AccessibilitySettingsAnchor: String, CaseIterable, Sendable {
 
 /// Anchor points for navigating to specific sections within the Privacy & Security settings pane.
 /// These anchors allow direct navigation to subsections of the macOS System Settings Privacy & Security panel.
-@available(macOS 13.0, *)
+@available(macOS 11.0, *)
 public enum PrivacySecurityAnchor: String, CaseIterable, Sendable {
     /// Opens the Advanced section in Privacy & Security.
     case advanced = "Advanced"
@@ -230,7 +230,7 @@ public enum PrivacySecurityAnchor: String, CaseIterable, Sendable {
 }
 #endif
 
-@available(macOS 13.0, iOS 16.0, *)
+@available(macOS 11.0, iOS 16.0, *)
 public struct SystemSettingsDestination: Hashable, Sendable {
     public let url: URL
 
@@ -249,7 +249,7 @@ public struct SystemSettingsDestination: Hashable, Sendable {
 }
 
 #if os(macOS)
-@available(macOS 13.0, *)
+@available(macOS 11.0, *)
 public extension SystemSettingsDestination {
     init(paneIdentifier: String, anchor: String? = nil) {
         let encodedAnchor = anchor?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
@@ -267,18 +267,27 @@ public extension SystemSettingsDestination {
     }
 }
 
-@available(macOS 13.0, *)
+@available(macOS 11.0, *)
 public extension SystemSettingsDestination {
+    /// Returns the Privacy & Security pane identifier used by the running OS.
+    /// macOS 11 and 12 still expose the legacy System Preferences pane.
+    private static var privacyPaneIdentifier: String {
+        if #available(macOS 13.0, *) {
+            return "com.apple.settings.PrivacySecurity.extension"
+        }
+        return "com.apple.preference.security"
+    }
+
     /// Privacy & Security home page.
     static func privacy() -> Self {
-        Self(paneIdentifier: "com.apple.settings.PrivacySecurity.extension")
+        Self(paneIdentifier: privacyPaneIdentifier)
     }
 
     /// Convenience helper for the Privacy & Security extension anchors.
     /// Example anchors include `Privacy_Advertising` and `Privacy_AllFiles`.
     static func privacy(anchor: String) -> Self {
         Self(
-            paneIdentifier: "com.apple.settings.PrivacySecurity.extension",
+            paneIdentifier: privacyPaneIdentifier,
             anchor: anchor
         )
     }
@@ -286,7 +295,7 @@ public extension SystemSettingsDestination {
     /// Convenience helper for typed Privacy & Security anchors.
     static func privacy(anchor: PrivacySecurityAnchor) -> Self {
         Self(
-            paneIdentifier: "com.apple.settings.PrivacySecurity.extension",
+            paneIdentifier: privacyPaneIdentifier,
             anchor: anchor.rawValue
         )
     }

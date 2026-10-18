@@ -69,7 +69,7 @@ It opens the correct privacy page automatically and, for panes that support drag
 
 ## Requirements
 
-- macOS 13+
+- macOS 11+
 - Swift 6 package toolchain
 - SwiftUI + AppKit host application
 
@@ -139,8 +139,8 @@ Why this split matters:
 
 Platform support:
 
-- `PermissionFlow`: `macOS 13+`
-- `SystemSettingsKit`: `macOS 13+`, `iOS 16+`
+- `PermissionFlow`: `macOS 11+`
+- `SystemSettingsKit`: `macOS 11+`, `iOS 16+`
 
 `SystemSettingsKit` is intentionally partial on iOS. The macOS deeplink-based pane and anchor APIs remain macOS-only, while iOS only exposes destinations that are publicly supported by UIKit, such as the current app's Settings page.
 
@@ -919,23 +919,23 @@ let title = bundle.localizedString(
 )
 ```
 
-To show the Accessibility privacy page name in host UI, use `accessibilityNameResource`. It is a `LocalizedStringResource` backed by the package bundle, so SwiftUI follows the **host app locale** automatically. On macOS 27 and later System Settings labels this page **Device Control and Data Access**; earlier versions still use **Accessibility**. The settings URL and `Privacy_Accessibility` anchor are unchanged.
+To show the Accessibility privacy page name in host UI, use `accessibilityNameResource`. It is a package-localized `String` resolved through the package bundle and usable directly with SwiftUI. On macOS 27 and later System Settings labels this page **Device Control and Data Access**; earlier versions still use **Accessibility**. The settings URL and `Privacy_Accessibility` anchor are unchanged.
 
 ```swift
 import PermissionFlow
 import SwiftUI
 
-// SwiftUI: follows the host app language (Chinese host → Chinese label)
+// SwiftUI: use the package-localized string directly
 Text(PermissionFlowResources.accessibilityNameResource)
 ```
 
-In AppKit, resolve it to a `String` with `String(localized:)`:
+In AppKit, use the resolved `String` directly:
 
 ```swift
 import AppKit
 import PermissionFlow
 
-let name = String(localized: PermissionFlowResources.accessibilityNameResource)
+let name = PermissionFlowResources.accessibilityNameResource
 label.stringValue = name
 button.title = name
 ```
@@ -967,11 +967,11 @@ public enum PermissionFlowResources {
     public static func accessibilityName(
         operatingSystemVersion: OperatingSystemVersion = ProcessInfo.processInfo.operatingSystemVersion
     ) -> String
-    public static var accessibilityNameResource: LocalizedStringResource { get }
+    public static var accessibilityNameResource: String { get }
     public static func accessibilityNameResource(
         operatingSystemVersion: OperatingSystemVersion
-    ) -> LocalizedStringResource
-    public static func localizedStringResource(for nameKey: String) -> LocalizedStringResource
+    ) -> String
+    public static func localizedStringResource(for nameKey: String) -> String
     public static func localizedString(
         for nameKey: String,
         defaultValue: String? = nil,

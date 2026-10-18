@@ -6,19 +6,30 @@ import StoreKit
 import MusicKit
 #endif
 
-@available(macOS 13.0, *)
+@available(macOS 11.0, *)
 public struct MediaAppleMusicPermissionStatusProvider: PermissionStatusProviding {
     public var capability: PermissionStatusCapability { .preflightSupported }
 
     public func authorizationState() -> PermissionAuthorizationState {
         #if canImport(MusicKit)
-        switch MusicAuthorization.currentStatus {
-        case .authorized:
-            return .granted
-        case .denied, .restricted, .notDetermined:
-            return .notGranted
-        @unknown default:
-            return .unknown
+        if #available(macOS 12.0, *) {
+            switch MusicAuthorization.currentStatus {
+            case .authorized:
+                return .granted
+            case .denied, .restricted, .notDetermined:
+                return .notGranted
+            @unknown default:
+                return .unknown
+            }
+        } else {
+            switch SKCloudServiceController.authorizationStatus() {
+            case .authorized:
+                return .granted
+            case .denied, .restricted, .notDetermined:
+                return .notGranted
+            @unknown default:
+                return .unknown
+            }
         }
         #else
         switch SKCloudServiceController.authorizationStatus() {

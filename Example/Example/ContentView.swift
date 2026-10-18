@@ -17,7 +17,7 @@ struct ContentView: View {
 
     var body: some View {
 #if os(macOS)
-        NavigationStack {
+        NavigationView {
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
                     heroSection
@@ -57,14 +57,14 @@ struct ContentView: View {
 #if os(macOS)
                 Text("Each button opens the corresponding system settings privacy page. Only permission pages that support drag-and-drop app addition will show the floating authorization window. It's recommended to drag in the current Example.app by default.")
                     .font(.system(size: 14))
-                    .foregroundStyle(.secondary)
+                    .foregroundColor(Color.secondary)
                 Text("Permission pages like Automation and Files & Folders that don't natively support drag-and-drop app addition will only open the settings interface without showing the floating window. Camera, Microphone, Calendars, and Reminders use the system authorization prompt (no floating drag panel).")
                     .font(.system(size: 13, weight: .medium))
-                    .foregroundStyle(.primary)
+                    .foregroundColor(Color.primary)
 #else
                 Text("Current page is split by platform. iOS side only shows available SystemSettingsKit entry points; PermissionFlow only supports macOS.")
                     .font(.system(size: 14))
-                    .foregroundStyle(.secondary)
+                    .foregroundColor(Color.secondary)
 #endif
             }
         }
@@ -78,7 +78,7 @@ struct ContentView: View {
                     .font(.system(size: 24, weight: .bold))
                 Text("Switch the locale below to inject `.environment(\\.locale, .init(identifier: ...))` into the floating PermissionFlow panel.")
                     .font(.system(size: 14))
-                    .foregroundStyle(.secondary)
+                    .foregroundColor(Color.secondary)
             }
 
             Picker("Language", selection: $localizationTestLocale) {
@@ -98,7 +98,7 @@ struct ContentView: View {
 #if os(macOS)
             Text("Then open any PermissionFlow card below. The floating window will use the selected locale for its localized strings.")
                 .font(.system(size: 12))
-                .foregroundStyle(.secondary)
+                .foregroundColor(Color.secondary)
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), alignment: .leading)], spacing: 5) {
                 PermissionFlowButton(title: "Accessibility", pane: .accessibility)
                 PermissionFlowButton(title: "App Management", pane: .appManagement)
@@ -132,7 +132,7 @@ struct ContentView: View {
         .padding(24)
         .background(
             RoundedRectangle(cornerRadius: 24, style: .continuous)
-                .fill(.primary.opacity(0.06))
+                .fill(Color.primary.opacity(0.06))
         )
         .overlay(
             RoundedRectangle(cornerRadius: 24, style: .continuous)
@@ -148,11 +148,11 @@ struct ContentView: View {
 #if os(macOS)
                 Text("Below shows the capabilities of `SystemSettingsKit` split by platform. The macOS area is for testing `SystemSettings-URLs-macOS` style deeplinks; the iOS area shows currently wrapped iOS settings entry points.")
                     .font(.system(size: 14))
-                    .foregroundStyle(.secondary)
+                    .foregroundColor(Color.secondary)
 #else
                 Text("Current page only shows iOS available `SystemSettingsKit` examples. macOS-specific pane/anchor deeplinks and `PermissionFlow` authorization guidance won't be displayed on iOS.")
                     .font(.system(size: 14))
-                    .foregroundStyle(.secondary)
+                    .foregroundColor(Color.secondary)
 #endif
             }
 
@@ -191,13 +191,13 @@ struct ContentView: View {
                     settingsURLButton(title: "Accessibility", subtitle: "Navigate to Privacy & Security > Accessibility", symbolName: "figure.wave", tint: .blue) {
                         SystemSettings.open(.privacy(anchor: .privacyAccessibility))
                     }
-                    settingsURLButton(title: "Automation", subtitle: "Navigate to Privacy & Security > Automation", symbolName: "apple.terminal.on.rectangle", tint: .brown) {
+                    settingsURLButton(title: "Automation", subtitle: "Navigate to Privacy & Security > Automation", symbolName: "apple.terminal.on.rectangle", tint: .orange) {
                         SystemSettings.open(.privacy(anchor: .privacyAutomation))
                     }
-                    settingsURLButton(title: "App Management", subtitle: "Navigate to Privacy & Security > App Management", symbolName: "shippingbox", tint: .brown) {
+                    settingsURLButton(title: "App Management", subtitle: "Navigate to Privacy & Security > App Management", symbolName: "shippingbox", tint: .orange) {
                         SystemSettings.open(.privacy(anchor: .privacyAppBundles))
                     }
-                    settingsURLButton(title: "Analytics & Improvements", subtitle: "Navigate to Privacy & Security > Analytics & Improvements", symbolName: "chart.bar", tint: .cyan) {
+                    settingsURLButton(title: "Analytics & Improvements", subtitle: "Navigate to Privacy & Security > Analytics & Improvements", symbolName: "chart.bar", tint: .blue) {
                         SystemSettings.open(.privacy(anchor: .privacyAnalytics))
                     }
                     settingsURLButton(title: "Audio Capture", subtitle: "Navigate to Privacy & Security > Audio Capture", symbolName: "waveform", tint: .purple) {
@@ -222,16 +222,16 @@ struct ContentView: View {
                     settingsURLButton(title: "Developer Tools", subtitle: "Navigate to Privacy & Security > Developer Tools", symbolName: "hammer", tint: .orange) {
                         SystemSettings.open(.privacy(anchor: .privacyDevTools))
                     }
-                    settingsURLButton(title: "Files and Folders", subtitle: "Navigate to Privacy & Security > Files and Folders", symbolName: "folder", tint: .teal) {
+                    settingsURLButton(title: "Files and Folders", subtitle: "Navigate to Privacy & Security > Files and Folders", symbolName: "folder", tint: .green) {
                         SystemSettings.open(.privacy(anchor: .privacyFilesAndFolders))
                     }
-                    settingsURLButton(title: "Focus", subtitle: "Navigate to Privacy & Security > Focus", symbolName: "moon.circle", tint: .indigo) {
+                    settingsURLButton(title: "Focus", subtitle: "Navigate to Privacy & Security > Focus", symbolName: "moon.circle", tint: .purple) {
                         SystemSettings.open(.privacy(anchor: .privacyFocus))
                     }
-                    settingsURLButton(title: "HomeKit", subtitle: "Navigate to Privacy & Security > HomeKit", symbolName: "house", tint: .mint) {
+                    settingsURLButton(title: "HomeKit", subtitle: "Navigate to Privacy & Security > HomeKit", symbolName: "house", tint: .green) {
                         SystemSettings.open(.privacy(anchor: .privacyHomeKit))
                     }
-                    settingsURLButton(title: "Input Monitoring", subtitle: "Navigate to Privacy & Security > Input Monitoring", symbolName: "keyboard", tint: .mint) {
+                    settingsURLButton(title: "Input Monitoring", subtitle: "Navigate to Privacy & Security > Input Monitoring", symbolName: "keyboard", tint: .green) {
                         SystemSettings.open(.privacy(anchor: .privacyListenEvent))
                     }
                     settingsURLButton(title: "Location Services", subtitle: "Navigate to Privacy & Security > Location Services", symbolName: "location", tint: .orange) {
@@ -262,7 +262,7 @@ struct ContentView: View {
                     settingsURLButton(title: "Reminders", subtitle: "Navigate to Privacy & Security > Reminders", symbolName: "list.bullet", tint: .blue) {
                         SystemSettings.open(.privacy(anchor: .privacyReminders))
                     }
-                    settingsURLButton(title: "Remote Desktop", subtitle: "Navigate to Privacy & Security > Remote Desktop", symbolName: "desktopcomputer.and.arrow.down", tint: .cyan) {
+                    settingsURLButton(title: "Remote Desktop", subtitle: "Navigate to Privacy & Security > Remote Desktop", symbolName: "desktopcomputer.and.arrow.down", tint: .blue) {
                         SystemSettings.open(.privacy(anchor: .privacyRemoteDesktop))
                     }
                     settingsURLButton(title: "Screen Recording", subtitle: "Navigate to Privacy & Security > Screen Recording", symbolName: "display", tint: .green) {
@@ -274,7 +274,7 @@ struct ContentView: View {
                     settingsURLButton(title: "System Services", subtitle: "Navigate to Privacy & Security > System Services", symbolName: "gearshape.2.fill", tint: .gray) {
                         SystemSettings.open(.privacy(anchor: .privacySystemServices))
                     }
-                    settingsURLButton(title: "Full Disk Access", subtitle: "Navigate to Privacy & Security > Full Disk Access", symbolName: "externaldrive", tint: .indigo) {
+                    settingsURLButton(title: "Full Disk Access", subtitle: "Navigate to Privacy & Security > Full Disk Access", symbolName: "externaldrive", tint: .purple) {
                         SystemSettings.open(.privacy(anchor: .privacyAllFiles))
                     }
                 }
@@ -289,15 +289,15 @@ struct ContentView: View {
                     settingsURLButton(title: "Bluetooth", symbolName: "bolt.horizontal.circle", tint: .blue) { SystemSettings.open(.bluetooth) }
                     settingsURLButton(title: "Battery", symbolName: "battery.100", tint: .green) { SystemSettings.open(SystemSettingsDestination(paneIdentifier: "com.apple.Battery-Settings.extension")) }
                     settingsURLButton(title: "Date & Time", symbolName: "calendar", tint: .orange) { SystemSettings.open(SystemSettingsDestination(paneIdentifier: "com.apple.Date-Time-Settings.extension")) }
-                    settingsURLButton(title: "Desktop & Dock", symbolName: "menubar.dock.rectangle", tint: .teal) { SystemSettings.open(SystemSettingsDestination(paneIdentifier: "com.apple.Desktop-Settings.extension")) }
-                    settingsURLButton(title: "Displays", symbolName: "display.2", tint: .indigo) { SystemSettings.open(.displays) }
+                    settingsURLButton(title: "Desktop & Dock", symbolName: "menubar.dock.rectangle", tint: .green) { SystemSettings.open(SystemSettingsDestination(paneIdentifier: "com.apple.Desktop-Settings.extension")) }
+                    settingsURLButton(title: "Displays", symbolName: "display.2", tint: .purple) { SystemSettings.open(.displays) }
                     settingsURLButton(title: "General", symbolName: "gearshape", tint: .secondary) { SystemSettings.open(SystemSettingsDestination(paneIdentifier: "com.apple.systempreferences.GeneralSettings")) }
-                    settingsURLButton(title: "Login Items", symbolName: "person.badge.key", tint: .brown) { SystemSettings.open(.loginItems) }
-                    settingsURLButton(title: "Network", symbolName: "network", tint: .cyan) { SystemSettings.open(SystemSettingsDestination(paneIdentifier: "com.apple.Network-Settings.extension")) }
+                    settingsURLButton(title: "Login Items", symbolName: "person.badge.key", tint: .orange) { SystemSettings.open(.loginItems) }
+                    settingsURLButton(title: "Network", symbolName: "network", tint: .blue) { SystemSettings.open(SystemSettingsDestination(paneIdentifier: "com.apple.Network-Settings.extension")) }
                     settingsURLButton(title: "Passwords", symbolName: "key", tint: .yellow) { SystemSettings.open(SystemSettingsDestination(paneIdentifier: "com.apple.Passwords")) }
                     settingsURLButton(title: "Wallpaper", symbolName: "photo.on.rectangle", tint: .purple) { SystemSettings.open(.wallpaper) }
                     settingsURLButton(title: "Wi-Fi", symbolName: "wifi", tint: .blue) { SystemSettings.open(.wifi) }
-                    settingsURLButton(title: "VPN", symbolName: "lock.shield", tint: .indigo) { SystemSettings.open(.vpn) }
+                    settingsURLButton(title: "VPN", symbolName: "lock.shield", tint: .purple) { SystemSettings.open(.vpn) }
                     settingsURLButton(title: "Screen Saver", symbolName: "sparkles.tv", tint: .pink) { SystemSettings.open(SystemSettingsDestination(paneIdentifier: "com.apple.Wallpaper-Settings.extension", anchor: "ScreenSaver")) }
                 }
             )
@@ -307,7 +307,7 @@ struct ContentView: View {
                 buttons: {
                     settingsURLButton(title: "Wi-Fi Main", subtitle: "Navigate to Wi-Fi > Main", symbolName: "wifi", tint: .blue) { SystemSettings.open(.wifi(anchor: .generalMain)) }
                     settingsURLButton(title: "Join Network", subtitle: "Navigate to Wi-Fi > Join Network", symbolName: "plus.circle", tint: .green) { SystemSettings.open(.wifi(anchor: .generalJoin)) }
-                    settingsURLButton(title: "Network Details", subtitle: "Navigate to Wi-Fi > Details", symbolName: "info.circle", tint: .cyan) { SystemSettings.open(.wifi(anchor: .generalDetails)) }
+                    settingsURLButton(title: "Network Details", subtitle: "Navigate to Wi-Fi > Details", symbolName: "info.circle", tint: .blue) { SystemSettings.open(.wifi(anchor: .generalDetails)) }
                     settingsURLButton(title: "Advanced", subtitle: "Navigate to Wi-Fi > Advanced", symbolName: "slider.horizontal.3", tint: .gray) { SystemSettings.open(.wifi(anchor: .advanced)) }
                 }
             )
@@ -315,7 +315,7 @@ struct ContentView: View {
             settingsURLGroup(
                 title: "VPN Sub-pages",
                 buttons: {
-                    settingsURLButton(title: "VPN", subtitle: "Navigate to VPN > VPN", symbolName: "lock.shield", tint: .indigo) { SystemSettings.open(.vpn(anchor: .vpn)) }
+                    settingsURLButton(title: "VPN", subtitle: "Navigate to VPN > VPN", symbolName: "lock.shield", tint: .purple) { SystemSettings.open(.vpn(anchor: .vpn)) }
                     settingsURLButton(title: "VPN on Demand", subtitle: "Navigate to VPN > VPN on Demand", symbolName: "bolt.shield", tint: .purple) { SystemSettings.open(.vpn(anchor: .vpnOnDemand)) }
                 }
             )
@@ -325,7 +325,7 @@ struct ContentView: View {
                 buttons: {
                     settingsURLButton(title: "Display", subtitle: "Navigate to Accessibility > Display", symbolName: "display", tint: .blue) { SystemSettings.open(.accessibility(anchor: .display)) }
                     settingsURLButton(title: "VoiceOver", subtitle: "Navigate to Accessibility > VoiceOver", symbolName: "speaker.wave.2", tint: .purple) { SystemSettings.open(.accessibility(anchor: .voiceOver)) }
-                    settingsURLButton(title: "Zoom", subtitle: "Navigate to Accessibility > Zoom", symbolName: "plus.magnifyingglass", tint: .indigo) { SystemSettings.open(.accessibility(anchor: .zoom)) }
+                    settingsURLButton(title: "Zoom", subtitle: "Navigate to Accessibility > Zoom", symbolName: "plus.magnifyingglass", tint: .purple) { SystemSettings.open(.accessibility(anchor: .zoom)) }
                     settingsURLButton(title: "Spoken Content", subtitle: "Navigate to Accessibility > Spoken Content", symbolName: "text.bubble", tint: .orange) { SystemSettings.open(.accessibility(anchor: .spokenContent)) }
                     settingsURLButton(title: "Raw Anchor", subtitle: "Navigate with raw anchor AX_ZOOM_MAX_FACTOR", symbolName: "link", tint: .gray) { SystemSettings.open(.accessibility(anchor: "AX_ZOOM_MAX_FACTOR")) }
                 }
@@ -334,15 +334,15 @@ struct ContentView: View {
             settingsURLGroup(
                 title: "Display Sub-pages",
                 buttons: {
-                    settingsURLButton(title: "Display List", subtitle: "Navigate to Displays > Display List", symbolName: "rectangle.on.rectangle", tint: .indigo) { SystemSettings.open(.displays(anchor: .displaysSection)) }
+                    settingsURLButton(title: "Display List", subtitle: "Navigate to Displays > Display List", symbolName: "rectangle.on.rectangle", tint: .purple) { SystemSettings.open(.displays(anchor: .displaysSection)) }
                     settingsURLButton(title: "Arrangement", subtitle: "Navigate to Displays > Arrangement", symbolName: "square.grid.3x3", tint: .blue) { SystemSettings.open(.displays(anchor: .arrangementSection)) }
                     settingsURLButton(title: "Resolution", subtitle: "Navigate to Displays > Resolution", symbolName: "aspectratio", tint: .green) { SystemSettings.open(.displays(anchor: .resolutionSection)) }
                     settingsURLButton(title: "Night Shift", subtitle: "Navigate to Displays > Night Shift", symbolName: "moon.stars", tint: .orange) { SystemSettings.open(.displays(anchor: .nightShiftSection)) }
                     settingsURLButton(title: "Color Profile", subtitle: "Navigate to Displays > Color Profile", symbolName: "paintpalette", tint: .pink) { SystemSettings.open(.displays(anchor: .profileSection)) }
-                    settingsURLButton(title: "Sidecar", subtitle: "Navigate to Displays > Sidecar", symbolName: "ipad.and.arrow.forward", tint: .mint) { SystemSettings.open(.displays(anchor: .sidecarSection)) }
+                    settingsURLButton(title: "Sidecar", subtitle: "Navigate to Displays > Sidecar", symbolName: "ipad.and.arrow.forward", tint: .green) { SystemSettings.open(.displays(anchor: .sidecarSection)) }
                     settingsURLButton(title: "Advanced", subtitle: "Navigate to Displays > Advanced", symbolName: "slider.horizontal.3", tint: .gray) { SystemSettings.open(.displays(anchor: .advancedSection)) }
                     settingsURLButton(title: "Ambient Display", subtitle: "Navigate to Displays > Ambient Display", symbolName: "sparkles", tint: .purple) { SystemSettings.open(.displays(anchor: .ambienceSection)) }
-                    settingsURLButton(title: "Display Characteristics", subtitle: "Navigate to Displays > Display Characteristics", symbolName: "dial.medium", tint: .teal) { SystemSettings.open(.displays(anchor: .characteristicSection)) }
+                    settingsURLButton(title: "Display Characteristics", subtitle: "Navigate to Displays > Display Characteristics", symbolName: "dial.medium", tint: .green) { SystemSettings.open(.displays(anchor: .characteristicSection)) }
                     settingsURLButton(title: "Miscellaneous", subtitle: "Navigate to Displays > Miscellaneous", symbolName: "ellipsis.circle", tint: .secondary) { SystemSettings.open(.displays(anchor: .miscellaneousSection)) }
                 }
             )
@@ -351,38 +351,38 @@ struct ContentView: View {
                 title: "Login Items Sub-pages",
                 buttons: {
                     settingsURLButton(title: "Extension Items", subtitle: "Navigate to Login Items > Extension Items", symbolName: "puzzlepiece.extension", tint: .purple) { SystemSettings.open(.loginItems(anchor: .extensionItems)) }
-                    settingsURLButton(title: "Share Menu", subtitle: "Navigate to Login Items & Extensions > Share Menu", symbolName: "square.and.arrow.up", tint: .teal) { SystemSettings.open(.loginItems(extensionPointIdentifier: .shareServices)) }
+                    settingsURLButton(title: "Share Menu", subtitle: "Navigate to Login Items & Extensions > Share Menu", symbolName: "square.and.arrow.up", tint: .green) { SystemSettings.open(.loginItems(extensionPointIdentifier: .shareServices)) }
                     settingsURLButton(title: "Actions", subtitle: "Navigate to Login Items & Extensions > Actions", symbolName: "wand.and.sparkles", tint: .pink) { SystemSettings.open(.loginItems(extensionPointIdentifier: .actions)) }
                     settingsURLButton(title: "Photo Editing", subtitle: "Navigate to Login Items & Extensions > Photo Editing", symbolName: "photo", tint: .orange) { SystemSettings.open(.loginItems(extensionPointIdentifier: .photoEditing)) }
                     settingsURLButton(title: "Spotlight Importers", subtitle: "Navigate to Login Items & Extensions > Spotlight", symbolName: "magnifyingglass", tint: .blue) { SystemSettings.open(.loginItems(extensionPointIdentifier: .spotlightImporter)) }
-                    settingsURLButton(title: "Quick Look Previews", subtitle: "Navigate to Login Items & Extensions > Quick Look", symbolName: "eye", tint: .indigo) { SystemSettings.open(.loginItems(extensionPointIdentifier: .quickLookPreview)) }
-                    settingsURLButton(title: "File Providers", subtitle: "Navigate to Login Items & Extensions > File Providers", symbolName: "externaldrive.connected.to.line.below", tint: .mint) { SystemSettings.open(.loginItems(extensionPointIdentifier: .fileProvider)) }
+                    settingsURLButton(title: "Quick Look Previews", subtitle: "Navigate to Login Items & Extensions > Quick Look", symbolName: "eye", tint: .purple) { SystemSettings.open(.loginItems(extensionPointIdentifier: .quickLookPreview)) }
+                    settingsURLButton(title: "File Providers", subtitle: "Navigate to Login Items & Extensions > File Providers", symbolName: "externaldrive.connected.to.line.below", tint: .green) { SystemSettings.open(.loginItems(extensionPointIdentifier: .fileProvider)) }
                     settingsURLButton(title: "Finder Quick Actions", subtitle: "Navigate to Login Items & Extensions > Finder Quick Actions", symbolName: "folder.badge.gearshape", tint: .green) { SystemSettings.open(.loginItems(extensionPointIdentifier: .finderQuickActions)) }
                     settingsURLButton(title: "Touch Bar Quick Actions", subtitle: "Navigate to Login Items & Extensions > Touch Bar Quick Actions", symbolName: "rectangle.inset.filled", tint: .gray) { SystemSettings.open(.loginItems(extensionPointIdentifier: .touchBarQuickActions)) }
                     settingsURLButton(title: "Legacy Dock Tiles", subtitle: "Navigate to Login Items & Extensions > Legacy Dock Tiles", symbolName: "dock.rectangle", tint: .blue) { SystemSettings.open(.loginItems(extensionPointIdentifier: .legacyDockTiles)) }
-                    settingsURLButton(title: "Legacy Spotlight Importers", subtitle: "Navigate to Login Items & Extensions > Legacy Spotlight Importers", symbolName: "magnifyingglass.circle", tint: .indigo) { SystemSettings.open(.loginItems(extensionPointIdentifier: .legacySpotlightImporter)) }
+                    settingsURLButton(title: "Legacy Spotlight Importers", subtitle: "Navigate to Login Items & Extensions > Legacy Spotlight Importers", symbolName: "magnifyingglass.circle", tint: .purple) { SystemSettings.open(.loginItems(extensionPointIdentifier: .legacySpotlightImporter)) }
                 }
             )
 
             settingsURLGroup(
                 title: "System & Advanced Pages",
                 buttons: {
-                    settingsURLButton(title: "AirDrop & Handoff", symbolName: "arrow.left.arrow.right.circle", tint: .mint) { SystemSettings.open(SystemSettingsDestination(paneIdentifier: "com.apple.AirDrop-Handoff-Settings.extension")) }
+                    settingsURLButton(title: "AirDrop & Handoff", symbolName: "arrow.left.arrow.right.circle", tint: .green) { SystemSettings.open(SystemSettingsDestination(paneIdentifier: "com.apple.AirDrop-Handoff-Settings.extension")) }
                     settingsURLButton(title: "CDs & DVDs", symbolName: "opticaldiscdrive", tint: .orange) { SystemSettings.open(SystemSettingsDestination(paneIdentifier: "com.apple.CD-DVD-Settings.extension")) }
                     settingsURLButton(title: "Coverage", symbolName: "checkmark.shield", tint: .green) { SystemSettings.open(SystemSettingsDestination(paneIdentifier: "com.apple.Coverage-Settings.extension")) }
                     settingsURLButton(title: "Family Sharing", symbolName: "person.3", tint: .pink) { SystemSettings.open(SystemSettingsDestination(paneIdentifier: "com.apple.Family-Settings.extension")) }
                     settingsURLButton(title: "Follow Up", symbolName: "list.bullet.clipboard", tint: .orange) { SystemSettings.open(SystemSettingsDestination(paneIdentifier: "com.apple.FollowUpSettings.FollowUpSettingsExtension")) }
-                    settingsURLButton(title: "Headphones", symbolName: "headphones", tint: .indigo) { SystemSettings.open(SystemSettingsDestination(paneIdentifier: "com.apple.HeadphoneSettings")) }
+                    settingsURLButton(title: "Headphones", symbolName: "headphones", tint: .purple) { SystemSettings.open(SystemSettingsDestination(paneIdentifier: "com.apple.HeadphoneSettings")) }
                     settingsURLButton(title: "Language & Region", symbolName: "globe", tint: .blue) { SystemSettings.open(SystemSettingsDestination(paneIdentifier: "com.apple.Localization-Settings.extension")) }
-                    settingsURLButton(title: "Profiles", symbolName: "doc.badge.gearshape", tint: .brown) { SystemSettings.open(SystemSettingsDestination(paneIdentifier: "com.apple.Profiles-Settings.extension")) }
-                    settingsURLButton(title: "Sharing", symbolName: "square.and.arrow.up.on.square", tint: .teal) { SystemSettings.open(SystemSettingsDestination(paneIdentifier: "com.apple.Sharing-Settings.extension")) }
+                    settingsURLButton(title: "Profiles", symbolName: "doc.badge.gearshape", tint: .orange) { SystemSettings.open(SystemSettingsDestination(paneIdentifier: "com.apple.Profiles-Settings.extension")) }
+                    settingsURLButton(title: "Sharing", symbolName: "square.and.arrow.up.on.square", tint: .green) { SystemSettings.open(SystemSettingsDestination(paneIdentifier: "com.apple.Sharing-Settings.extension")) }
                     settingsURLButton(title: "Software Update", symbolName: "arrow.down.circle", tint: .green) { SystemSettings.open(SystemSettingsDestination(paneIdentifier: "com.apple.Software-Update-Settings.extension")) }
                     settingsURLButton(title: "Startup Disk", symbolName: "internaldrive", tint: .gray) { SystemSettings.open(SystemSettingsDestination(paneIdentifier: "com.apple.Startup-Disk-Settings.extension")) }
-                    settingsURLButton(title: "Storage", symbolName: "externaldrive.fill.badge.person.crop", tint: .indigo) { SystemSettings.open(SystemSettingsDestination(paneIdentifier: "com.apple.settings.Storage")) }
-                    settingsURLButton(title: "Time Machine", symbolName: "clock.arrow.trianglehead.counterclockwise.rotate.90", tint: .mint) { SystemSettings.open(SystemSettingsDestination(paneIdentifier: "com.apple.Time-Machine-Settings.extension")) }
+                    settingsURLButton(title: "Storage", symbolName: "externaldrive.fill.badge.person.crop", tint: .purple) { SystemSettings.open(SystemSettingsDestination(paneIdentifier: "com.apple.settings.Storage")) }
+                    settingsURLButton(title: "Time Machine", symbolName: "clock.arrow.trianglehead.counterclockwise.rotate.90", tint: .green) { SystemSettings.open(SystemSettingsDestination(paneIdentifier: "com.apple.Time-Machine-Settings.extension")) }
                     settingsURLButton(title: "Touch ID", symbolName: "touchid", tint: .primary) { SystemSettings.open(SystemSettingsDestination(paneIdentifier: "com.apple.Touch-ID-Settings.extension")) }
                     settingsURLButton(title: "Transfer or Reset", symbolName: "arrow.triangle.2.circlepath", tint: .red) { SystemSettings.open(SystemSettingsDestination(paneIdentifier: "com.apple.Transfer-Reset-Settings.extension")) }
-                    settingsURLButton(title: "Users & Groups", symbolName: "person.2", tint: .cyan) { SystemSettings.open(SystemSettingsDestination(paneIdentifier: "com.apple.Users-Groups-Settings.extension")) }
+                    settingsURLButton(title: "Users & Groups", symbolName: "person.2", tint: .blue) { SystemSettings.open(SystemSettingsDestination(paneIdentifier: "com.apple.Users-Groups-Settings.extension")) }
                     settingsURLButton(title: "About This Mac", symbolName: "info.circle", tint: .blue) { SystemSettings.open(SystemSettingsDestination(paneIdentifier: "com.apple.SystemProfiler.AboutExtension")) }
                 }
             )
@@ -403,7 +403,7 @@ struct ContentView: View {
                         title: "appSettings URL",
                         subtitle: SystemSettingsDestination.appSettings.url.absoluteString,
                         symbolName: "link",
-                        tint: .indigo
+                        tint: .purple
                     )
                     iosInfoCard(
                         title: "Platform Boundaries",
@@ -434,7 +434,7 @@ struct ContentView: View {
                         title: "appSettings URL",
                         subtitle: "app-settings:",
                         symbolName: "link",
-                        tint: .indigo
+                        tint: .purple
                     )
                     iosInfoCard(
                         title: "Platform Boundaries",
@@ -451,12 +451,12 @@ struct ContentView: View {
 #if os(iOS)
                     settingsURLButton(title: "Convenience Method", subtitle: "iOS: `SystemSettings.openNotificationSettings()`", symbolName: "bell.badge", tint: .orange) { SystemSettings.openNotificationSettings() }
                     settingsURLButton(title: "Notification Settings Page", subtitle: "iOS: `SystemSettings.open(.notificationSettings)`", symbolName: "bell.circle", tint: .orange) { SystemSettings.open(.notificationSettings) }
-                    settingsURLButton(title: "Direct Open notificationSettings URL", subtitle: "iOS: `SystemSettings.open(url: SystemSettingsDestination.notificationSettings.url)`", symbolName: "link.badge.plus", tint: .brown) { SystemSettings.open(url: SystemSettingsDestination.notificationSettings.url) }
+                    settingsURLButton(title: "Direct Open notificationSettings URL", subtitle: "iOS: `SystemSettings.open(url: SystemSettingsDestination.notificationSettings.url)`", symbolName: "link.badge.plus", tint: .orange) { SystemSettings.open(url: SystemSettingsDestination.notificationSettings.url) }
                     iosInfoCard(
                         title: "notificationSettings URL",
                         subtitle: SystemSettingsDestination.notificationSettings.url.absoluteString,
                         symbolName: "link",
-                        tint: .brown
+                        tint: .orange
                     )
 #else
                     unsupportedPlatformButton(
@@ -475,13 +475,13 @@ struct ContentView: View {
                         title: "Direct Open notificationSettings URL",
                         subtitle: "iOS: `SystemSettings.open(url: SystemSettingsDestination.notificationSettings.url)`",
                         symbolName: "link.badge.plus",
-                        tint: .brown
+                        tint: .orange
                     )
                     iosInfoCard(
                         title: "notificationSettings URL",
                         subtitle: "app-settings:notifications",
                         symbolName: "link",
-                        tint: .brown
+                        tint: .orange
                     )
 #endif
                 }
@@ -490,7 +490,7 @@ struct ContentView: View {
         .padding(24)
         .background(
             RoundedRectangle(cornerRadius: 24, style: .continuous)
-                .fill(.primary.opacity(0.06))
+                .fill(Color.primary.opacity(0.06))
         )
         .overlay(
             RoundedRectangle(cornerRadius: 24, style: .continuous)
@@ -525,7 +525,7 @@ struct ContentView: View {
                 title: "Full Disk Access",
                 subtitle: "Full disk access authorization example.",
                 symbolName: "externaldrive",
-                tint: .indigo,
+                tint: .purple,
                 buttonTitle: "Open Full Disk Access",
                 helperText: "Supports drag-and-drop: \(Bundle.main.bundleURL.lastPathComponent)",
                 localeIdentifier: localizationTestLocale
@@ -540,7 +540,7 @@ struct ContentView: View {
                 title: "App Management",
                 subtitle: "App Management authorization example.",
                 symbolName: "shippingbox",
-                tint: .brown,
+                tint: .orange,
                 buttonTitle: "Open App Management",
                 helperText: "Supports drag-and-drop: \(Bundle.main.bundleURL.lastPathComponent)",
                 localeIdentifier: localizationTestLocale
@@ -585,7 +585,7 @@ struct ContentView: View {
                 title: "Input Monitoring",
                 subtitle: "Input monitoring authorization example.",
                 symbolName: "keyboard",
-                tint: .mint,
+                tint: .green,
                 buttonTitle: "Open Input Monitoring",
                 helperText: "Supports drag-and-drop: \(Bundle.main.bundleURL.lastPathComponent)",
                 localeIdentifier: localizationTestLocale
@@ -657,7 +657,7 @@ struct ContentView: View {
                 .font(.system(size: 18, weight: .semibold))
             Text(subtitle)
                 .font(.system(size: 12.5))
-                .foregroundStyle(.secondary)
+                .foregroundColor(Color.secondary)
         }
         .padding(.top, 4)
     }
@@ -675,7 +675,7 @@ struct ContentView: View {
                     if let subtitle {
                         Text(subtitle)
                             .font(.system(size: 11))
-                            .foregroundStyle(.secondary)
+                            .foregroundColor(Color.secondary)
                             .fixedSize(horizontal: false, vertical: true)
                     }
                 }
@@ -686,10 +686,10 @@ struct ContentView: View {
             .padding(.horizontal, 14)
             .padding(.vertical, 12)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(tint.opacity(0.12), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .background(RoundedRectangle(cornerRadius: 16, style: .continuous).fill(tint.opacity(0.12)))
         }
         .buttonStyle(.plain)
-        .foregroundStyle(tint)
+        .foregroundColor(tint)
     }
 
     @ViewBuilder
@@ -703,11 +703,11 @@ struct ContentView: View {
                     .font(.system(size: 13, weight: .semibold))
                 Text(subtitle)
                     .font(.system(size: 11))
-                    .foregroundStyle(.secondary)
+                    .foregroundColor(Color.secondary)
                     .fixedSize(horizontal: false, vertical: true)
                 Text("Requires iOS host app to run")
                     .font(.system(size: 10.5, weight: .medium))
-                    .foregroundStyle(.secondary)
+                    .foregroundColor(Color.secondary)
             }
             Spacer()
             Image(systemName: "iphone")
@@ -716,12 +716,12 @@ struct ContentView: View {
         .padding(.horizontal, 14)
         .padding(.vertical, 12)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(tint.opacity(0.10), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .background(RoundedRectangle(cornerRadius: 16, style: .continuous).fill(tint.opacity(0.10)))
         .overlay(
             RoundedRectangle(cornerRadius: 16, style: .continuous)
                 .strokeBorder(tint.opacity(0.16), lineWidth: 1)
         )
-        .foregroundStyle(tint)
+        .foregroundColor(tint)
     }
 
     @ViewBuilder
@@ -735,7 +735,7 @@ struct ContentView: View {
                     .font(.system(size: 13, weight: .semibold))
                 Text(subtitle)
                     .font(.system(size: 11))
-                    .foregroundStyle(.secondary)
+                    .foregroundColor(Color.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
             Spacer()
@@ -743,12 +743,12 @@ struct ContentView: View {
         .padding(.horizontal, 14)
         .padding(.vertical, 12)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(tint.opacity(0.10), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .background(RoundedRectangle(cornerRadius: 16, style: .continuous).fill(tint.opacity(0.10)))
         .overlay(
             RoundedRectangle(cornerRadius: 16, style: .continuous)
                 .strokeBorder(tint.opacity(0.16), lineWidth: 1)
         )
-        .foregroundStyle(tint)
+        .foregroundColor(tint)
     }
 }
 
@@ -763,8 +763,8 @@ private struct CameraPermissionCard: View {
                 Image(systemName: "camera")
                     .font(.system(size: 16, weight: .semibold))
                     .frame(width: 32, height: 32)
-                    .background(Color.pink.opacity(0.12), in: RoundedRectangle(cornerRadius: 10))
-                    .foregroundStyle(.pink)
+                    .background(RoundedRectangle(cornerRadius: 10).fill(Color.pink.opacity(0.12)))
+                    .foregroundColor(Color.pink)
                 Spacer()
                 statusBadge
             }
@@ -772,25 +772,25 @@ private struct CameraPermissionCard: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text("Camera authorization example using the system privacy prompt.")
                     .font(.system(size: 12))
-                    .foregroundStyle(.secondary)
+                    .foregroundColor(Color.secondary)
                     .fixedSize(horizontal: false, vertical: true)
                 Button {
                     requestAuthorization()
                 } label: {
                     Label(buttonTitle, systemImage: buttonState.systemImage)
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(.pink)
+                .buttonStyle(.borderless)
+                .accentColor(.pink)
                 .controlSize(.small)
                 Text("Status: \(statusText)")
                     .font(.system(size: 10.5))
-                    .foregroundStyle(.secondary)
+                    .foregroundColor(Color.secondary)
                     .lineLimit(1)
             }
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.primary.opacity(0.06), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .background(RoundedRectangle(cornerRadius: 20, style: .continuous).fill(Color.primary.opacity(0.06)))
         .overlay(
             RoundedRectangle(cornerRadius: 20, style: .continuous)
                 .stroke(Color.black.opacity(0.045), lineWidth: 1)
@@ -835,8 +835,8 @@ private struct CameraPermissionCard: View {
     private var statusBadge: some View {
         Label(statusText, systemImage: buttonState.systemImage)
             .font(.system(size: 10.5, weight: .medium))
-            .labelStyle(.titleAndIcon)
-            .foregroundStyle(buttonState.isGranted ? .green : .secondary)
+            .labelStyle(.titleOnly)
+            .foregroundColor(buttonState.isGranted ? Color.green : Color.secondary)
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
             .background(
@@ -870,8 +870,8 @@ private struct MicrophonePermissionCard: View {
                 Image(systemName: "mic")
                     .font(.system(size: 16, weight: .semibold))
                     .frame(width: 32, height: 32)
-                    .background(Color.red.opacity(0.12), in: RoundedRectangle(cornerRadius: 10))
-                    .foregroundStyle(.red)
+                    .background(RoundedRectangle(cornerRadius: 10).fill(Color.red.opacity(0.12)))
+                    .foregroundColor(Color.red)
                 Spacer()
                 statusBadge
             }
@@ -879,25 +879,25 @@ private struct MicrophonePermissionCard: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text("Microphone authorization example using the system privacy prompt.")
                     .font(.system(size: 12))
-                    .foregroundStyle(.secondary)
+                    .foregroundColor(Color.secondary)
                     .fixedSize(horizontal: false, vertical: true)
                 Button {
                     requestAuthorization()
                 } label: {
                     Label(buttonTitle, systemImage: buttonState.systemImage)
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(.red)
+                .buttonStyle(.borderless)
+                .accentColor(.red)
                 .controlSize(.small)
                 Text("Status: \(statusText)")
                     .font(.system(size: 10.5))
-                    .foregroundStyle(.secondary)
+                    .foregroundColor(Color.secondary)
                     .lineLimit(1)
             }
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.primary.opacity(0.06), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .background(RoundedRectangle(cornerRadius: 20, style: .continuous).fill(Color.primary.opacity(0.06)))
         .overlay(
             RoundedRectangle(cornerRadius: 20, style: .continuous)
                 .stroke(Color.black.opacity(0.045), lineWidth: 1)
@@ -942,8 +942,8 @@ private struct MicrophonePermissionCard: View {
     private var statusBadge: some View {
         Label(statusText, systemImage: buttonState.systemImage)
             .font(.system(size: 10.5, weight: .medium))
-            .labelStyle(.titleAndIcon)
-            .foregroundStyle(buttonState.isGranted ? .green : .secondary)
+            .labelStyle(.titleOnly)
+            .foregroundColor(buttonState.isGranted ? Color.green : Color.secondary)
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
             .background(
@@ -1010,31 +1010,31 @@ private struct PermissionCard: View {
                 Image(systemName: symbolName)
                     .font(.system(size: 16, weight: .semibold))
                     .frame(width: 32, height: 32)
-                    .background(tint.opacity(0.12), in: RoundedRectangle(cornerRadius: 10))
-                    .foregroundStyle(tint)
+                    .background(RoundedRectangle(cornerRadius: 10).fill(tint.opacity(0.12)))
+                    .foregroundColor(tint)
                 Spacer()
             }
             Text(title).font(.system(size: 18, weight: .semibold))
             VStack(alignment: .leading, spacing: 3) {
                 Text(subtitle)
                     .font(.system(size: 12))
-                    .foregroundStyle(.secondary)
+                    .foregroundColor(Color.secondary)
                     .fixedSize(horizontal: false, vertical: true)
                 Button(buttonTitle) {
                     action(controller, clickSourceFrameInScreen())
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(tint)
+                .buttonStyle(.borderless)
+                .accentColor(tint)
                 .controlSize(.small)
                 Text(helperText)
                     .font(.system(size: 10.5))
-                    .foregroundStyle(.secondary)
+                    .foregroundColor(Color.secondary)
                     .lineLimit(1)
             }
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.primary.opacity(0.06), in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .background(RoundedRectangle(cornerRadius: 20, style: .continuous).fill(Color.primary.opacity(0.06)))
         .overlay(
             RoundedRectangle(cornerRadius: 20, style: .continuous)
                 .stroke(Color.black.opacity(0.045), lineWidth: 1)

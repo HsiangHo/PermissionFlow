@@ -2,7 +2,7 @@
 import EventKit
 import Foundation
 
-@available(macOS 13.0, *)
+@available(macOS 11.0, *)
 public struct RemindersPermissionStatusProvider: PermissionStatusProviding {
     public var capability: PermissionStatusCapability { .preflightSupported }
 

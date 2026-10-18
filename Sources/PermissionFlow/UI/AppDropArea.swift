@@ -2,7 +2,7 @@
 import AppKit
 import SwiftUI
 
-@available(macOS 13.0, *)
+@available(macOS 11.0, *)
 struct AppDragItemView: NSViewRepresentable {
     let url: URL
     let localeIdentifier: String?
@@ -20,7 +20,7 @@ struct AppDragItemView: NSViewRepresentable {
     }
 }
 
-@available(macOS 13.0, *)
+@available(macOS 11.0, *)
 final class AppDragSourceView: NSView, NSDraggingSource {
     private var url: URL
     private var localeIdentifier: String?
@@ -138,7 +138,7 @@ final class AppDragSourceView: NSView, NSDraggingSource {
     }
 }
 
-@available(macOS 13.0, *)
+@available(macOS 11.0, *)
 private final class AppBundlePasteboardWriter: NSObject, NSPasteboardWriting {
     private let url: URL
 
@@ -170,7 +170,7 @@ private final class AppBundlePasteboardWriter: NSObject, NSPasteboardWriting {
     }
 }
 
-@available(macOS 13.0, *)
+@available(macOS 11.0, *)
 private struct AppDragCardContent: View {
     let url: URL
     let localeIdentifier: String?
@@ -185,7 +185,7 @@ private struct AppDragCardContent: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(url.deletingPathExtension().lastPathComponent)
                     .font(.system(size: 16, weight: .regular))
-                    .foregroundStyle(.primary)
+                    .foregroundColor(.primary)
             }
             Spacer()
             VStack(spacing: 0) {
@@ -194,14 +194,17 @@ private struct AppDragCardContent: View {
                 Text(dragLabel)
                     .font(.system(size: 8, weight: .light))
             }
-            .foregroundStyle(.secondary)
+            .foregroundColor(.secondary)
             .padding(.trailing, 6)
         }
         .padding(6)
-        .background(.background.opacity(0.65), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .background(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(Color(NSColor.windowBackgroundColor).opacity(0.65))
+        )
         .overlay(
             RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .stroke(.primary.opacity(0.085), style: StrokeStyle(lineWidth: 1, dash: []))
+                .stroke(Color.primary.opacity(0.085), style: StrokeStyle(lineWidth: 1, dash: []))
         )
     }
 

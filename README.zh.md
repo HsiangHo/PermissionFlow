@@ -68,7 +68,7 @@ PermissionFlow
 
 ## 运行要求
 
-- macOS 13+
+- macOS 11+
 - Swift 6 Package Toolchain
 - 宿主应用为 SwiftUI + AppKit macOS 应用
 
@@ -138,8 +138,8 @@ package 地址和安装入口与之前保持一致。现在变化的是 product 
 
 平台支持：
 
-- `PermissionFlow`：`macOS 13+`
-- `SystemSettingsKit`：`macOS 13+`、`iOS 16+`
+- `PermissionFlow`：`macOS 11+`
+- `SystemSettingsKit`：`macOS 11+`、`iOS 16+`
 
 其中 `SystemSettingsKit` 在 iOS 上是“部分支持”状态。macOS 那套基于 pane identifier 和 anchor 的 deeplink API 仍然只在 macOS 暴露；iOS 侧只提供 UIKit 公开允许的设置入口，例如当前应用的设置页。
 
@@ -913,7 +913,7 @@ let title = bundle.localizedString(
 )
 ```
 
-宿主界面要显示辅助功能隐私页名称时，用 `accessibilityNameResource`。它是绑在包资源 bundle 上的 `LocalizedStringResource`，SwiftUI 会自动跟随**主应用语言**。macOS 27 起系统设置将该页标为 **设备控制和数据访问**（Device Control and Data Access）；更早版本仍是 **辅助功能**（Accessibility）。设置 URL 和 `Privacy_Accessibility` 锚点不变。
+宿主界面要显示辅助功能隐私页名称时，用 `accessibilityNameResource`。它是通过包资源 bundle 解析出的本地化 `String`，可以直接传给 SwiftUI。macOS 27 起系统设置将该页标为 **设备控制和数据访问**（Device Control and Data Access）；更早版本仍是 **辅助功能**（Accessibility）。设置 URL 和 `Privacy_Accessibility` 锚点不变。
 
 ```swift
 import PermissionFlow
@@ -929,7 +929,7 @@ AppKit 里用 `String(localized:)` 收成 `String`：
 import AppKit
 import PermissionFlow
 
-let name = String(localized: PermissionFlowResources.accessibilityNameResource)
+let name = PermissionFlowResources.accessibilityNameResource
 label.stringValue = name
 button.title = name
 ```
@@ -961,11 +961,11 @@ public enum PermissionFlowResources {
     public static func accessibilityName(
         operatingSystemVersion: OperatingSystemVersion = ProcessInfo.processInfo.operatingSystemVersion
     ) -> String
-    public static var accessibilityNameResource: LocalizedStringResource { get }
+    public static var accessibilityNameResource: String { get }
     public static func accessibilityNameResource(
         operatingSystemVersion: OperatingSystemVersion
-    ) -> LocalizedStringResource
-    public static func localizedStringResource(for nameKey: String) -> LocalizedStringResource
+    ) -> String
+    public static func localizedStringResource(for nameKey: String) -> String
     public static func localizedString(
         for nameKey: String,
         defaultValue: String? = nil,

@@ -4,7 +4,7 @@ import Combine
 import Foundation
 import PermissionFlow
 
-@available(macOS 13.0, *)
+@available(macOS 11.0, *)
 @MainActor
 public final class PermissionFlowStatusStore: ObservableObject {
     @Published public private(set) var states: [PermissionFlowPane: PermissionAuthorizationState]

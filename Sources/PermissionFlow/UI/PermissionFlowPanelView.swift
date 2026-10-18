@@ -1,7 +1,8 @@
 #if os(macOS)
+import AppKit
 import SwiftUI
 
-@available(macOS 13.0, *)
+@available(macOS 11.0, *)
 struct PermissionFlowPanelView: View {
     @ObservedObject var controller: PermissionFlowController
 
@@ -25,10 +26,10 @@ struct PermissionFlowPanelView: View {
         .fixedSize(horizontal: false, vertical: true)
         .background(
             RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .fill(.ultraThinMaterial)
+                .fill(Color(NSColor.windowBackgroundColor).opacity(0.92))
                 .overlay(
                     RoundedRectangle(cornerRadius: 18, style: .continuous)
-                        .stroke(.primary.opacity(0.14), lineWidth: 1)
+                        .stroke(Color.primary.opacity(0.14), lineWidth: 1)
                 )
         )
     }
@@ -46,8 +47,7 @@ struct PermissionFlowPanelView: View {
                     } label: {
                         Image(systemName: "gear")
                             .font(.system(size: 15, weight: .semibold))
-                            .symbolRenderingMode(.palette)
-                            .foregroundStyle(.primary, .secondary.opacity(0.35))
+                            .foregroundColor(.secondary)
                     }
                     .buttonStyle(.borderless)
                 }
@@ -56,8 +56,7 @@ struct PermissionFlowPanelView: View {
                 } label: {
                     Image(systemName: "xmark.circle.fill")
                         .font(.system(size: 18, weight: .semibold))
-                        .symbolRenderingMode(.palette)
-                        .foregroundStyle(.primary, .secondary.opacity(0.35))
+                        .foregroundColor(.secondary)
                 }
                 .buttonStyle(.borderless)
             }
@@ -67,7 +66,7 @@ struct PermissionFlowPanelView: View {
     /// Builds a markdown-backed localized title such as:
     /// "Drag **Example** to the list above to allow **Accessibility**."
     /// On macOS 27+, the permission name is "Device Control and Data Access".
-    private var headerTitle: AttributedString {
+    private var headerTitle: String {
         let localizedTemplate = PermissionFlowLocalizer.string(
             "permission_flow.panel.title",
             defaultValue: "Drag **%@** to the list above to allow **%@**.",
@@ -81,10 +80,9 @@ struct PermissionFlowPanelView: View {
             paneDisplayTitle
         )
 
-        return (try? AttributedString(
-            markdown: markdown,
-            options: AttributedString.MarkdownParsingOptions(interpretedSyntax: .inlineOnlyPreservingWhitespace)
-        )) ?? AttributedString(markdown)
+        // AttributedString markdown parsing is only available on macOS 12.
+        // A plain String keeps the panel usable on macOS 11.
+        return markdown.replacingOccurrences(of: "**", with: "")
     }
 
     /// Prefers the Finder-style display name so the title reads naturally even
@@ -118,7 +116,7 @@ struct PermissionFlowPanelView: View {
     }
 }
 
-@available(macOS 13.0, *)
+@available(macOS 11.0, *)
 private struct HeaderDirectionIcon: View {
     let isDragging: Bool
 
@@ -128,8 +126,7 @@ private struct HeaderDirectionIcon: View {
     var body: some View {
         Image(systemName: "arrowshape.up.fill")
             .font(.system(size: 14, weight: .bold))
-            .symbolRenderingMode(.hierarchical)
-            .foregroundStyle(.tint)
+            .foregroundColor(.accentColor)
             .rotationEffect(.degrees(isDragging ? 0 : (wigglePhase ? 12 : -12)))
             .offset(y: isDragging ? 0 : (wigglePhase ? -2 : 1))
             .scaleEffect(isDragging ? (scalePhase ? 1.18 : 0.88) : 1)

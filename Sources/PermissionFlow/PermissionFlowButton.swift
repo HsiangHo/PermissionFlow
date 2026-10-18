@@ -3,18 +3,18 @@ import AppKit
 import AVFoundation
 import SwiftUI
 
-@available(macOS 13.0, *)
+@available(macOS 11.0, *)
 public struct PermissionFlowButton: View {
     @Environment(\.locale) var locale
     @StateObject private var controller: PermissionFlowController
     @State private var buttonState: PermissionFlowButtonState
     private let pane: PermissionFlowPane
     private let suggestedAppURLs: [URL]
-    private let title: LocalizedStringResource?
+    private let title: String?
     private let customLabel: ((PermissionFlowButtonState) -> AnyView)?
 
     public init(
-        title: LocalizedStringResource? = nil,
+        title: String? = nil,
         pane: PermissionFlowPane,
         suggestedAppURLs: [URL] = [],
         configuration: PermissionFlowConfiguration = .init()

@@ -3,7 +3,7 @@ import AVFoundation
 import Foundation
 import PermissionFlow
 
-@available(macOS 13.0, *)
+@available(macOS 11.0, *)
 public struct CameraPermissionStatusProvider: PermissionStatusProviding {
     public var capability: PermissionStatusCapability { .preflightSupported }
 

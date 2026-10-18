@@ -1,7 +1,7 @@
 #if os(macOS)
 import Foundation
 
-@available(macOS 13.0, *)
+@available(macOS 11.0, *)
 public enum PermissionAuthorizationState: String, CaseIterable, Codable, Equatable, Sendable {
     /// Permission is granted and ready to use.
     case granted

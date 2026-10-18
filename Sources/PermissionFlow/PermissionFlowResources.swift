@@ -54,7 +54,7 @@ public enum PermissionFlowResources {
     /// ```swift
     /// Text(PermissionFlowResources.accessibilityNameResource)
     /// ```
-    public static var accessibilityNameResource: LocalizedStringResource {
+    public static var accessibilityNameResource: String {
         accessibilityNameResource(
             operatingSystemVersion: ProcessInfo.processInfo.operatingSystemVersion
         )
@@ -63,7 +63,7 @@ public enum PermissionFlowResources {
     /// Same as `accessibilityNameResource`, with an explicit OS version for tests.
     public static func accessibilityNameResource(
         operatingSystemVersion: OperatingSystemVersion
-    ) -> LocalizedStringResource {
+    ) -> String {
         localizedStringResource(for: accessibilityName(operatingSystemVersion: operatingSystemVersion))
     }
 
@@ -76,11 +76,11 @@ public enum PermissionFlowResources {
     /// ```swift
     /// Text(PermissionFlowResources.localizedStringResource(for: PermissionFlowResources.accessibilityNameKey))
     /// ```
-    public static func localizedStringResource(for nameKey: String) -> LocalizedStringResource {
-        LocalizedStringResource(
-            String.LocalizationValue(nameKey),
-            bundle: .atURL(bundle.bundleURL)
-        )
+    public static func localizedStringResource(for nameKey: String) -> String {
+        // LocalizedStringResource was introduced in macOS 13. Returning the
+        // resolved package string keeps this SwiftUI convenience available on
+        // macOS 11 and still works with Text(String).
+        localizedString(for: nameKey)
     }
 
     /// Resolves a packaged localization string for `nameKey`.
@@ -148,8 +148,8 @@ public enum PermissionFlowResources {
         let locale = Locale(identifier: normalizedIdentifier)
 
         var preferences = [normalizedIdentifier]
-        if let identifier = locale.language.languageCode?.identifier {
-            if let script = locale.language.script?.identifier {
+        if let identifier = locale.languageCode {
+            if let script = locale.scriptCode {
                 preferences.append("\(identifier)-\(script)")
             }
             preferences.append(identifier)
@@ -160,6 +160,13 @@ public enum PermissionFlowResources {
 
     private static func findPackageResourceBundle() -> Bundle? {
         let bundleFileName = "\(resourceBundleName).bundle"
+
+        // SwiftPM provides the most reliable path while running package tests
+        // and command-line clients. Keep the guarded lookup before the
+        // packaged-app heuristics below, whose paths vary by integration.
+        #if SWIFT_PACKAGE
+        return Bundle.module
+        #endif
 
         var candidateDirectories: [URL] = []
         let marker = Bundle(for: PermissionFlowResourceBundleToken.self)
@@ -214,3 +221,21 @@ public enum PermissionFlowResources {
 /// Marker type used only for `Bundle(for:)` resolution. Must stay in this
 /// module so the returned bundle points at PermissionFlow's binary/product.
 private final class PermissionFlowResourceBundleToken {}
+
+/// Keeps the resource helper source-compatible with callers that inspect the
+/// `key` exposed by LocalizedStringResource on newer macOS versions.
+public extension String {
+    var key: String {
+        // On macOS 11 the Foundation LocalizedStringResource type does not
+        // exist. Preserve the small `.key` inspection API for the package's
+        // built-in resources while the helper returns a plain localized String.
+        switch self {
+        case "Accessibility", "辅助功能", "輔助功能":
+            return PermissionFlowResources.accessibilityNameKey
+        case "Device Control and Data Access", "设备控制和数据访问", "裝置控制和資料取用":
+            return PermissionFlowResources.deviceControlAndDataAccessNameKey
+        default:
+            return self
+        }
+    }
+}
