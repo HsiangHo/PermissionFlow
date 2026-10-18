@@ -17,20 +17,24 @@ struct ContentView: View {
 
     var body: some View {
 #if os(macOS)
-        NavigationView {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 24) {
-                    heroSection
-                    localizationTestSection
-                    permissionCardsSection
-                    settingsURLTestSection
+        if #available(macOS 12.0, *) {
+            NavigationView {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 24) {
+                        heroSection
+                        localizationTestSection
+                        permissionCardsSection
+                        settingsURLTestSection
+                    }
+                    .padding(.horizontal, 24)
+                    .padding(.bottom, 24)
+                    .environment(\.locale, .init(identifier: localizationTestLocale))
                 }
-                .padding(.horizontal, 24)
-                .padding(.bottom, 24)
-                .environment(\.locale, .init(identifier: localizationTestLocale))
+                .frame(minWidth: 420, minHeight: 320)
+                .navigationTitle("PermissionFlow Demo")
             }
-            .frame(minWidth: 420, minHeight: 320)
-            .navigationTitle("PermissionFlow Demo")
+        } else {
+            legacyMacOSContent
         }
 #else
         ScrollView {
@@ -48,6 +52,46 @@ struct ContentView: View {
         .navigationTitle("PermissionFlow Demo")
 #endif
     }
+
+#if os(macOS)
+    /// macOS 11's SwiftUI AttributeGraph has a small fixed data region. The
+    /// complete example view is intentionally kept behind the macOS 12 check;
+    /// its many grid items can otherwise abort the process before the first
+    /// window is shown on Big Sur.
+    private var legacyMacOSContent: some View {
+        NavigationView {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 18) {
+                    Text("PermissionFlow Demo")
+                        .font(.system(size: 28, weight: .bold))
+                    Text("Choose a permission to open its macOS 11 privacy pane.")
+                        .font(.system(size: 14))
+                        .foregroundColor(Color.secondary)
+
+                    VStack(alignment: .leading, spacing: 10) {
+                        legacyPermissionButton(title: "Accessibility", pane: .accessibility)
+                        legacyPermissionButton(title: "Full Disk Access", pane: .fullDiskAccess)
+                        legacyPermissionButton(title: "App Management", pane: .appManagement)
+                        legacyPermissionButton(title: "Developer Tools", pane: .developerTools)
+                        legacyPermissionButton(title: "Screen Recording", pane: .screenRecording)
+                    }
+                }
+                .padding(24)
+            }
+            .frame(minWidth: 420, minHeight: 320)
+            .navigationTitle("PermissionFlow Demo")
+        }
+    }
+
+    private func legacyPermissionButton(
+        title: String,
+        pane: PermissionFlowPane
+    ) -> some View {
+        PermissionFlowButton(title: title, pane: pane)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .buttonStyle(.bordered)
+    }
+#endif
 
     private var heroSection: some View {
         VStack(alignment: .leading, spacing: 6) {
